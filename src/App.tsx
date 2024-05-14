@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import LoginForm from './login-form/LoginForm';
+import BookList from './login-form/BookList';
+import HomePage from "./home-page/HomePage";
+import LoansList from "./login-form/LoanList";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    return (
+          <Routes>
+              <Route path="/home" element={<HomePage />}>
+                  <Route path="/home/book-list" element={<BookList />} />
+                  <Route path="/home/loan-list" element={<LoansList />} />
+              </Route>
+               <Route path="/login" element={<LoginForm />} />
+              <Route path="/" element={<Navigate to="/home" />} />
+
+
+              <Route path="*" element={<h1>404 - page not found</h1>} />
+             </Routes>
+    );
+};
 
 export default App;
