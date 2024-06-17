@@ -1,6 +1,6 @@
 import BookElement from './BookElement';
 
-const BookList = () => {
+const MyBookList = () => {
     const books = [
         {
             bookID: 1,
@@ -103,4 +103,4 @@ const BookList = () => {
     );
 };
 
-export default BookList;
+export default MyBookList;

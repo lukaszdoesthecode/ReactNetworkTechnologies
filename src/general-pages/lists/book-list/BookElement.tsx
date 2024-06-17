@@ -1,4 +1,5 @@
 import { FC } from "react";
+import {useTranslation} from "react-i18next";
 
 interface Book {
     bookID: number;
@@ -16,20 +17,22 @@ interface BookElementProps {
 }
 
 const BookElement: FC<BookElementProps> = ({ book }) => {
+    const {t, i18n} = useTranslation();
+
     return (
         <div className="Book-Element">
             <h3 className="Book-Element-Title">{book.title}</h3>
             <div className="Book-Element-Author">
-                <p>Author: {book.author}</p>
+                <p>{t('Author')}: {book.author}</p>
             </div>
             <div className="Book-Element-ISBN">
                 <p>ISBN: {book.ISBN}</p>
             </div>
             <div className="Book-Element-Publisher">
-                <p>Publisher: {book.publisher} ({book.yearPublished})</p>
+                <p>{t('Publisher')}: {book.publisher} ({book.yearPublished})</p>
             </div>
             <div className="Book-Element-Availability">
-                <p>Available Copies: {book.availableCopies}</p>
+                <p>{t('Available Copies')}: {book.availableCopies}</p>
             </div>
             <div className="Book-Element-Description">
                 <p>{book.description}</p>

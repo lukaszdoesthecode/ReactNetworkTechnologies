@@ -9,8 +9,8 @@ interface Loan {
 }
 
 const loans: Loan[] = [
-    { title: "Book One", borrowedDate: "2024-01-10", dueDate: "2024-02-10", returnDate: null },
-    { title: "Book Two", borrowedDate: "2024-01-15", dueDate: "2024-02-15", returnDate: "2024-02-14" },
+    { title: "1984", borrowedDate: "2024-01-10", dueDate: "2024-02-10", returnDate: null },
+    { title: "The Great Gatsby", borrowedDate: "2024-01-15", dueDate: "2024-02-15", returnDate: "2024-02-14" },
 ];
 
 const LoansList: React.FC = () => {

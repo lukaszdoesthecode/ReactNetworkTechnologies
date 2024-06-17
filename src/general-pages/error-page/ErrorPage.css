@@ -1,0 +1,31 @@
+.error-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full viewport height */
+    padding: 0 20px; /* Optional: padding to give some space around the content */
+}
+
+.error-pic {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.error-pic img {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain; /* Ensures the image scales nicely */
+}
+
+.error-text {
+    flex: 1;
+    padding: 20px; /* Optional: padding around the text */
+    text-align: center;
+}
+
+.error-text h1,
+.error-text h2,
+.error-text h3 {
+    margin: 10px 0; /* Optional: space between the headings */
+}
