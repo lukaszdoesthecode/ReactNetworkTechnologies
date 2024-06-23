@@ -1,0 +1,21 @@
+.book-element {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    width: 80%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.book-element-title {
+    color: rgb(56, 116, 203);
+    text-align: center;
+}
+
+.book-element-author,
+.book-element-isbn,
+.book-element-publisher,
+.book-element-availability,
+.book-element-description {
+    margin: 5px 0;
+}

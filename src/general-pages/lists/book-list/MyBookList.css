@@ -1,0 +1,18 @@
+.my-book-list-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.my-book-list {
+    width: 50%;
+    height: 100%;
+    margin-top: 150px;
+    overflow-y: auto;
+}
+
+.book-title {
+    color: rgb(56, 116, 203);
+    text-align: center;
+}

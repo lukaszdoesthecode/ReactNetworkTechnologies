@@ -1,17 +1,18 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { ToastContainer, toast, ToastPosition } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import MenuAppBar from "../../menu-app-bar/MenuAppBar";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
+import axios from 'axios';
 
 export default function DeleteBook() {
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
 
-    const [isbn, setIsbn] = useState('');
+    const [bookId, setBookId] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setIsbn(e.target.value);
+        setBookId(e.target.value);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,10 +44,16 @@ export default function DeleteBook() {
         );
     };
 
-    const handleDelete = () => {
-        // Perform the delete operation here
-        console.log("Book deleted with ISBN: ", isbn);
-        toast.dismiss();
+    const handleDelete = async () => {
+        try {
+            await axios.delete(`http://localhost:8081/api/books/${bookId}`);
+            console.log("Book deleted with ID: ", bookId);
+            toast.dismiss();
+            toast.success(t('Book deleted successfully'));
+        } catch (error) {
+            console.error("Error deleting book:", error);
+            toast.error(t('Failed to delete book'));
+        }
     };
 
     const handleCancel = () => {
@@ -57,34 +64,34 @@ export default function DeleteBook() {
         <div>
             <MenuAppBar/>
 
-        <div style={{ width: '100%', maxWidth: '400px', margin: 'auto' }}>
-            <form id="deleteBookForm" onSubmit={handleSubmit} style={{ marginTop: '80px' }}>
-                <TextField
-                    id="isbn"
-                    label="ISBN"
-                    variant="standard"
-                    name="isbn"
-                    value={isbn}
-                    onChange={handleChange}
-                    fullWidth
-                    margin="normal"
-                />
-                <div style={{ marginTop: '16px' }}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        type="submit"
-                        form="deleteBookForm"
+            <div style={{ width: '100%', maxWidth: '400px', margin: 'auto' }}>
+                <form id="deleteBookForm" onSubmit={handleSubmit} style={{ marginTop: '80px' }}>
+                    <TextField
+                        id="bookId"
+                        label={t("Book ID")}
+                        variant="standard"
+                        name="bookId"
+                        value={bookId}
+                        onChange={handleChange}
                         fullWidth
-                    >
-                        {t('Delete Book')}
-                    </Button>
-                </div>
-            </form>
-            <ToastContainer />
-        </div>
+                        margin="normal"
+                    />
+                    <div style={{ marginTop: '16px' }}>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            type="submit"
+                            form="deleteBookForm"
+                            fullWidth
+                        >
+                            {t('Delete Book')}
+                        </Button>
+                    </div>
+                </form>
+                <ToastContainer />
+            </div>
         </div>
     );
 }
 
-export {DeleteBook}
+export { DeleteBook }

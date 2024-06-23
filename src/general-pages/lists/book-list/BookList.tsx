@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importing useNavigate from react-router-dom
-import {HomePageClient} from "../../../api/connection/home-page";
+import { useNavigate } from "react-router-dom";
+import { HomePageClient } from "../../../api/connection/home-page";
 import BookElement from './BookElement';
 
 interface Book {
@@ -18,13 +18,13 @@ const BookList: React.FC = () => {
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate(); // Using useNavigate hook
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchBooks = async () => {
             const token = localStorage.getItem('authToken');
             if (!token) {
-                navigate('/login'); // Using navigate instead of history.push
+                navigate('/login');
                 return;
             }
 
@@ -40,7 +40,7 @@ const BookList: React.FC = () => {
         };
 
         fetchBooks();
-    }, [navigate]); // Adding navigate as a dependency
+    }, [navigate]);
 
     if (loading) {
         return <div>Loading...</div>;
@@ -51,10 +51,12 @@ const BookList: React.FC = () => {
     }
 
     return (
-        <div style={{ height: '700px', overflowY: 'auto' }}>
-            {books.map((book, index) => (
-                <BookElement key={index} book={book} />
-            ))}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '80%', maxWidth: '1200px', height: '700px', overflowY: 'auto', marginTop: '90px' }}>
+                {books.map((book, index) => (
+                    <BookElement key={index} book={book} />
+                ))}
+            </div>
         </div>
     );
 };

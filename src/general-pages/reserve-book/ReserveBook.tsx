@@ -19,7 +19,6 @@ export default function ReserveBook() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle the form submission logic here
         console.log("Form values: ", formValues);
     };
 

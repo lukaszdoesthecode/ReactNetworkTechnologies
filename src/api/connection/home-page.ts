@@ -34,9 +34,10 @@ export class HomePageClient {
 
             const token = response.data.token;
             if (typeof token === "string") {
+                console.log("Setting token:", token);  // Debugging log
                 localStorage.setItem('authToken', token);
+                this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             }
-            this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
             return {
                 success: true,
@@ -44,8 +45,7 @@ export class HomePageClient {
                 statusCode: response.status
             };
         } catch (error) {
-            const axiosError = error as AxiosError<Error>
-
+            const axiosError = error as AxiosError<Error>;
             return {
                 success: false,
                 data: null,
@@ -81,7 +81,7 @@ export class HomePageClient {
                 statusCode: response.status
             };
         } catch (error) {
-            const axiosError = error as AxiosError<Error>
+            const axiosError = error as AxiosError<Error>;
             return {
                 success: false,
                 data: null,
@@ -89,4 +89,65 @@ export class HomePageClient {
             };
         }
     }
+
+    public async getUserRoleByName(username: string): Promise<string> {
+        this.setAuthorizationHeader();
+        try {
+            const response: AxiosResponse<string> = await this.client.get(`/users/getUserRoleByName/${username}`);
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+            if (axiosError.response?.status === 404) {
+                throw new Error('User role not found');
+            } else {
+                throw new Error(axiosError.response?.statusText || 'Failed to fetch user role');
+            }
+        }
+    }
+
+    public async getUserIdByName(name: string): Promise<number> {
+        this.setAuthorizationHeader();
+        try {
+            const response: AxiosResponse<number> = await this.client.get(`/users/getUserIdByName/${name}`);
+            return response.data;
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+            if (axiosError.response?.status === 404) {
+                throw new Error('User ID not found');
+            } else {
+                throw new Error(axiosError.response?.statusText || 'Failed to fetch user ID');
+            }
+        }
+    }
+
+    public async getBooks(): Promise<ClientResponse<Book[] | null>> {
+        this.setAuthorizationHeader();
+        try {
+            const response: AxiosResponse<any[]> = await this.client.get('/books');
+            const books: Book[] = response.data.map((detail) => ({
+                bookID: detail.id,
+                ISBN: detail.isbn,
+                title: detail.title,
+                author: detail.author,
+                publisher: detail.publisher,
+                yearPublished: detail.publication_year,
+                availableCopies: detail.available_copies,
+                description: detail.description,
+                user: detail.user
+            }));
+            return {
+                success: true,
+                data: books,
+                statusCode: response.status
+            };
+        } catch (error) {
+            const axiosError = error as AxiosError<Error>;
+            return {
+                success: false,
+                data: null,
+                statusCode: axiosError.response?.status || 0
+            };
+        }
+    }
+
 }

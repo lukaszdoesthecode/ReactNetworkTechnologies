@@ -1,29 +1,48 @@
-import React, { FC } from "react";
-import {useTranslation} from "react-i18next";
+import React from 'react';
 
 interface Loan {
-    title: string;
-    borrowedDate: string;
-    dueDate: string;
-    returnDate: string | null;
+    loan_id: number;
+    book_id: {
+        id: number;
+        isbn: string;
+        title: string;
+        author: string;
+        publisher: string;
+        publication_year: number;
+        available_copies: number;
+        user: {
+            user_id: number;
+            email: string;
+            name: string;
+            userRole: string;
+        } | null;
+    };
+    user_id: {
+        user_id: number;
+        email: string;
+        name: string;
+        userRole: string;
+    };
+    loan_date: string;
+    due_date: string;
+    return_date: string | null;
 }
 
 interface LoanElementProps {
     loan: Loan;
 }
 
-const LoanElement: FC<LoanElementProps> = ({ loan }) => {
-    const {t, i18n} = useTranslation();
+const LoanElement: React.FC<LoanElementProps> = ({ loan }) => {
+    const { book_id, loan_date, due_date, return_date } = loan;
+    const status = return_date ? "Returned" : "Not returned yet";
 
     return (
-        <div className="Loan-Element">
-            <h3 className="Loan-Element-Title">{loan.title}</h3>
-            <div className="Loan-Element-Dates">
-                <p>{t('Borrowed')}: {loan.borrowedDate}</p>
-                <p>{t('Due')}: {loan.dueDate}</p>
-                {loan.returnDate && <p>Returned: {loan.returnDate}</p>}
-                {!loan.returnDate && <p>Status: Still on loan</p>}
-            </div>
+        <div className="loan-element">
+            <h2 className="book-title">{book_id.title}</h2>
+            <p><strong>Status:</strong> {status}</p>
+            <p><strong>Borrowed Date:</strong> {new Date(loan_date).toLocaleDateString()}</p>
+            <p><strong>Due Date:</strong> {new Date(due_date).toLocaleDateString()}</p>
+            <p><strong>Return Date:</strong> {return_date ? new Date(return_date).toLocaleDateString() : "Not returned yet"}</p>
         </div>
     );
 }

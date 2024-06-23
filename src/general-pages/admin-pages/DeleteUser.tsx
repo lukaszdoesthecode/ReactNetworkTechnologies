@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import MenuAppBar from "../../menu-app-bar/MenuAppBar";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
+import axios from 'axios';
 
 export default function DeleteUser() {
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [formValues, setFormValues] = useState({
-        email: '',
         username: ''
     });
 
@@ -21,7 +21,7 @@ export default function DeleteUser() {
         });
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         showToast();
     };
@@ -50,10 +50,21 @@ export default function DeleteUser() {
         );
     };
 
-    const handleDelete = () => {
-        // Perform the delete operation here
-        console.log("User deleted with Email: ", formValues.email, " and Username: ", formValues.username);
-        toast.dismiss();
+    const handleDelete = async () => {
+        try {
+            const searchResponse = await axios.get(`http://localhost:8081/api/users/getUserIdByName/${formValues.username}`);
+            const userId = searchResponse.data;
+
+            console.log("Searched User ID: ", userId);
+
+            await axios.delete(`http://localhost:8081/api/users/${userId}`);
+            console.log("User deleted with Username: ", formValues.username);
+            toast.dismiss();
+            toast.success(t('User deleted successfully'));
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            toast.error(t('Failed to delete user'));
+        }
     };
 
     const handleCancel = () => {
@@ -64,44 +75,32 @@ export default function DeleteUser() {
         <div>
             <MenuAppBar />
 
-        <div style={{ width: '100%', maxWidth: '400px', margin: 'auto' }}>
-            <form id="deleteUserForm" onSubmit={handleSubmit} style={{ marginTop: '80px' }}>
-                <TextField
-                    id="email"
-                    label={t("Email")}
-                    variant="standard"
-                    name="email"
-                    value={formValues.email}
-                    onChange={handleChange}
-                    fullWidth
-                    margin="normal"
-                />
-                <TextField
-                    id="username"
-                    label={t("Username")}
-                    variant="standard"
-                    name="username"
-                    value={formValues.username}
-                    onChange={handleChange}
-                    fullWidth
-                    margin="normal"
-                />
-                <div style={{ marginTop: '16px' }}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        type="submit"
-                        form="deleteUserForm"
+            <div style={{ width: '100%', maxWidth: '400px', margin: 'auto' }}>
+                <form id="deleteUserForm" onSubmit={handleSubmit} style={{ marginTop: '80px' }}>
+                    <TextField
+                        id="username"
+                        label={t("Username")}
+                        variant="standard"
+                        name="username"
+                        value={formValues.username}
+                        onChange={handleChange}
                         fullWidth
-                    >
-                        {t('Delete User')}
-                    </Button>
-                </div>
-            </form>
-            <ToastContainer />
-        </div>
+                        margin="normal"
+                    />
+                    <div style={{ marginTop: '16px' }}>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            type="submit"
+                            form="deleteUserForm"
+                            fullWidth
+                        >
+                            {t('Delete User')}
+                        </Button>
+                    </div>
+                </form>
+                <ToastContainer />
+            </div>
         </div>
     );
 }
-
-export {DeleteUser}

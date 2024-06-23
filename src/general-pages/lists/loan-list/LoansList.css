@@ -1,0 +1,24 @@
+.loans-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+}
+
+.loan-element {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    width: 80%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-title {
+    color: rgb(56, 116, 203);
+    text-align: center;
+}

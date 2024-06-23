@@ -1,13 +1,12 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button, TextField } from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import {Navigate, useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './LoginFrom.css';
-import axios from "axios";
-import {useApi} from "../../api/connection/ApiProvider";
-import {useTranslation} from "react-i18next";
+import { useApi } from "../../api/connection/ApiProvider";
+import { useTranslation } from "react-i18next";
 
 interface FormValues {
     username: string;
@@ -17,48 +16,54 @@ interface FormValues {
 function LoginForm() {
     const navigate = useNavigate();
     const apiClient = useApi();
-    const {t, i18n} = useTranslation();
+    const { t } = useTranslation();
 
     const onSubmit = useCallback(
         async (values: FormValues, formikHelpers: FormikHelpers<FormValues>) => {
             try {
-                const response = await axios.post('http://localhost:8081/api/auth/login', values);
-                if (response.status === 201) {
-                    const apiResponse = await apiClient.login(values);
-                    if (apiResponse.statusCode === 200) {
-                        navigate('/home/about-library');
-                    } else {
-                        // Handle the error, possibly using formikHelpers to set form errors
-                        console.error('Login failed:', apiResponse);
+                console.log('Login attempt:', values);
+                const response = await apiClient.login(values);
+                console.log('API response:', response);
+                if (response.success) {
+                    localStorage.setItem('authToken', response.data?.token || '');
+                    localStorage.setItem('username', values.username);
+                    console.log('Stored in localStorage:', {
+                        authToken: response.data?.token,
+                        username: values.username
+                    });
+
+                    try {
+                        const userId = await apiClient.getUserIdByName(values.username);
+                        localStorage.setItem('userId', userId.toString());
+                        console.log('User ID stored in localStorage:', userId);
+                    } catch (error) {
+                        console.error('An error occurred while fetching the user ID:', error);
                     }
+
+                    navigate('/home/about-library');
                 } else {
-                    // Handle unexpected status codes
-                    console.error('Unexpected status code:', response.status);
+                    console.error('Login failed:', response);
+                    formikHelpers.setErrors({ username: 'Invalid username or password' });
                 }
             } catch (error) {
                 console.error('An error occurred:', error);
-                // Handle the error, possibly using formikHelpers to set form errors
+                formikHelpers.setErrors({ username: 'An error occurred during login' });
+            } finally {
+                formikHelpers.setSubmitting(false);
             }
         },
         [apiClient, navigate]
     );
-
-
 
     const validationSchema = useMemo(() => Yup.object({
         username: Yup.string().required('Username is required'),
         password: Yup.string().required('Password is required').min(8, 'Password must be at least 8 characters')
     }), []);
 
-    const [goToBooks, setGoToBooks] = useState(false);
-    if (goToBooks) {
-        return <Navigate to="home//book-list" />;
-    }
-
     return (
         <div className="Center-Container">
             <div className="picture">
-                <img src="login_pic.jpg" alt="Library"/>
+                <img src="login_pic.jpg" alt="Library" />
             </div>
             <div className="Info">
                 <div className="Header">

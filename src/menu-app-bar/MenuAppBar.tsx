@@ -42,9 +42,9 @@ export default function MenuAppBar() {
     };
 
     const buttonStyle = {
-        width: '200px', // Sets a fixed width for all specified buttons
-        minWidth: '200px', // Ensures the width doesn't shrink below this value
-        padding: '8px 16px', // Adjusts the padding for a better appearance
+        width: '200px',
+        minWidth: '200px',
+        padding: '8px 16px',
     };
 
     return (
@@ -55,7 +55,7 @@ export default function MenuAppBar() {
                     edge="start"
                     color="inherit"
                     aria-label="menu"
-                    sx={{ width: 40, mr: 0.1 }} // Sets a fixed width for the menu button
+                    sx={{ width: 40, mr: 0.1 }}
                     onClick={handleMenuOpen}
                 >
                     <MenuIcon />
@@ -144,7 +144,7 @@ export default function MenuAppBar() {
                     color="inherit"
                     aria-label="account"
                     onClick={() => navigate('/login')}
-                    sx={{ width: 40, mr: 0.1 }} // Adjusts the padding for a narrower button
+                    sx={{ width: 40, mr: 0.1 }}
                 >
                     <AccountCircle />
                 </IconButton>

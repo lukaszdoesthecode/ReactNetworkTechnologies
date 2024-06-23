@@ -35,7 +35,6 @@ export default function AddBook() {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // Handle the form submission logic here
         console.log("Form values: ", formValues);
     };
 
@@ -132,7 +131,6 @@ export default function AddBook() {
                     id="genre"
                     name="genre"
                     value={formValues.genre}
-                    //TODOonChange={handleSelectChange}
                 >
                     <MenuItem value="fantasy">{t('Fantasy')}</MenuItem>
                     <MenuItem value="science fiction">{t('Science Fiction')}</MenuItem>
